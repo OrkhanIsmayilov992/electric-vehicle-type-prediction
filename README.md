@@ -24,3 +24,11 @@ Orkhan Ismayilov
 
 ## Lisenziya
 MIT
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.pkl
+*.joblib
+.DS_Store
+venv/
+.venv/
