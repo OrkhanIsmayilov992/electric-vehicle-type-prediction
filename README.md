@@ -1,3 +1,5 @@
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OrkhanIsmayilov992/electric-vehicle-type-prediction/blob/main/Electric_Vehicle_Population_Data.ipynb)
+
 # Electric Vehicle Type Prediction
 
 ## Məqsəd
