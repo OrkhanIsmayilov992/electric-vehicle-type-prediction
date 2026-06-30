@@ -13,7 +13,7 @@ Elektrikli avtomobillərin tipini (BEV vs PHEV) proqnozlaşdırmaq
 Data keyfiyyətini artırmaq üçün effektiv preprocessing strategiyaları tətbiq etmək
 Data leakage və zəif feature-ları aradan qaldırmaq
 Real data üzərində etibarlı model qurmaq
-🧹 Data Preprocessing və Cleaning
+🧹Data Preprocessing və Cleaning
 🔍 Çatışmayan dəyərlərin (NaN) analizi
 Datasetdə bəzi coğrafi sütunlarda (County, City, Postal Code, Electric Utility, 2020 Census Tract) çatışmayan dəyərlərin eyni sətirlərdə yerləşdiyi müşahidə edildi.
 
