@@ -1,172 +1,276 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OrkhanIsmayilov992/electric-vehicle-type-prediction/blob/main/Electric_Vehicle_Population_Data.ipynb)
 
-🚗 Elektrikli Avtomobillərin Təsnifatı və Analizi
-📌 Layihə haqqında
-Bu layihədə elektrikli nəqliyyat vasitələrinin (Electric Vehicles) xüsusiyyətlərinə əsaslanaraq onların BEV (Battery Electric Vehicle) və PHEV (Plug-in Hybrid Electric Vehicle) kimi təsnifatı həyata keçirilmişdir.
+# 🚗 Electric Vehicle Classification (BEV vs PHEV)
 
-Layihə yalnız model qurmaqdan ibarət deyil — burada real dünya data problemləri (çatışmayan dəyərlər, uyğunsuz məlumatlar, balanssız siniflər və s.) sistemli şəkildə analiz edilmiş və həll olunmuşdur.
+## 📌 Project Overview
 
-🎯 Məqsəd
-Layihənin əsas məqsədi:
+This project builds a machine learning model to classify electric vehicles into:
 
-Elektrikli avtomobillərin tipini (BEV vs PHEV) proqnozlaşdırmaq
-Data keyfiyyətini artırmaq üçün effektiv preprocessing strategiyaları tətbiq etmək
-Data leakage və zəif feature-ları aradan qaldırmaq
-Real data üzərində etibarlı model qurmaq
-🧹Data Preprocessing və Cleaning
-🔍 Çatışmayan dəyərlərin (NaN) analizi
-Datasetdə bəzi coğrafi sütunlarda (County, City, Postal Code, Electric Utility, 2020 Census Tract) çatışmayan dəyərlərin eyni sətirlərdə yerləşdiyi müşahidə edildi.
+- 🔋 **BEV (Battery Electric Vehicle)**
+- ⛽ **PHEV (Plug-in Hybrid Electric Vehicle)**
 
-Bu nəticə göstərir ki:
+Beyond model development, the project focuses on solving real-world data quality issues through comprehensive data cleaning, preprocessing, feature engineering, and statistical analysis.
 
-məlumatlar təsadüfi yox, blok şəklində itirilib
-bu cür məlumatlar birlikdə analiz olunmalıdır
-🧹 NaN dəyərlərin idarə olunması
-Model üçün kritik olan sütunlarda (Legislative District, Vehicle Location, Electric Range) çatışmayan dəyərlər silindi.
+---
 
-Qərarın səbəbi:
-NaN sayı ümumi datasetə nisbətən çox az idi
-bu sətirlərin silinməsi model nəticəsinə ciddi təsir etmirdi
-data keyfiyyətini artırırdı
-⚡ Lazımsız sütunların çıxarılması
-Aşağıdakı sütunlar datasetdən çıxarıldı:
+# 🎯 Objectives
 
-Unikal identifikatorlar (VIN, DOL ID)
-Redundant və az faydalı sütunlar (State, Postal Code)
-Məqsəd:
-Dataset ölçüsünü azaltmaq
-Hesablama sürətini artırmaq
-Modelin yalnız faydalı məlumatlara fokuslanmasını təmin etmək
-📊 Exploratory Data Analysis (EDA)
-🔢 Statistik analiz
-Əsas numeric sütunlar üzərində analiz aparıldı:
+- Predict the vehicle type (BEV vs PHEV)
+- Improve data quality through effective preprocessing
+- Prevent data leakage
+- Handle missing values and noisy data
+- Build a reliable machine learning model
 
-Model Year
-Electric Range
-Bu analiz vasitəsilə:
+---
 
-dəyərlərin paylanması
-outlier-lar
-ümumi trendlər müəyyən edildi
-📌 Kategorik dəyişənlərin analizi
-Kategorik sütunlarda unikal dəyər sayı yoxlanıldı.
+# 📂 Dataset
 
-Məqsəd:
-yüksək kardinalı dəyişənləri müəyyən etmək
-encoding strategiyasını planlamaq
-⚠️ Domain knowledge əsaslı qərar
-“CAFV Eligibility” sütunu üzrə bəzi avtomobillər üçün:
+The dataset contains information about registered electric vehicles, including:
 
-“Eligibility unknown as battery range has not been researched”
+- Vehicle Make & Model
+- Model Year
+- Electric Range
+- CAFV Eligibility
+- Legislative District
+- Vehicle Location
+- Geographic Information
+- Census Tract
 
-Bu dəyərlər dəyişdirilmədi.
+---
 
-Səbəb:
-bu status real dünyada dövlət qeydiyyatı ilə bağlıdır
-model üçün süni dəyişiklik etmək düzgün deyil
-🚨 Data Problemləri və Həllər
-🔻 Electric Range = 0 problemi
-Bəzi avtomobillər üçün elektrik məsafəsi 0 kimi göstərilmişdir.
+# 🧹 Data Cleaning & Preprocessing
 
-Həll:
-həmin avtomobilin modeli üzrə maksimum dəyər istifadə edildi
-Məntiq:
-0 real texniki göstərici deyil
-model səviyyəsində ən real dəyər maksimumdur
-🔻 Az müşahidəli markalar
-Bəzi markalarda müşahidə sayı çox az idi.
+### ✅ Missing Value Analysis
 
-Qərar:
-bu markalar datasetdən çıxarıldı
-Səbəb:
-modelə noise əlavə edir
-balansı pozur
-ümumiləşdirməni zəiflədir
-📊 Statistik Analiz
-🧪 Chi-Square testləri
-Aşağıdakı dəyişənlər arasında əlaqə yoxlanıldı:
+Several geographic columns contained missing values occurring in the same rows, indicating **block-wise missing data** rather than random missingness.
 
-Marka və avtomobil tipi
-Marka və CAFV statusu
-Avtomobil tipi və CAFV statusu
-Nəticə:
-dəyişənlər arasında statistik olaraq əhəmiyyətli əlaqə mövcuddur
-bu feature-lar model üçün informativdir
-🌍 Feature Engineering
-📍 Coğrafi məlumatların çıxarılması
-“Vehicle Location” sütunundan koordinatlar (latitude və longitude) çıxarıldı.
+### ✅ Missing Value Handling
 
-Əhəmiyyət:
-coğrafi məlumatlar modelə əlavə olundu
-region əsaslı analiz mümkün oldu
-🧠 Model Qurulması
-🔹 Feature Selection
-Model üçün aşağıdakı əsas dəyişənlər seçildi:
+Rows containing missing values in critical features were removed:
 
-Model Year
-Legislative District
-2020 Census Tract
-Latitude / Longitude
-🔹 Data Transformasiya
-Kategorik dəyişənlər encode edildi
-Bütün dəyişənlər scale olundu
-🔹 Train/Test bölünməsi
-Dataset:
+- Legislative District
+- Vehicle Location
+- Electric Range
 
-80% training
-20% testing
-Stratified bölünmə istifadə edildi ki, sinif balansı qorunsun.
+This decision had minimal impact on dataset size while improving overall data quality.
 
-🤖 Modellər
-Aşağıdakı modellər sınaqdan keçirildi:
+---
 
-Random Forest
-XGBoost
-📊 Nəticələr
-Ən yaxşı model: XGBoost
-Accuracy: ~80.6%
-📈 Feature Importance
-Ən vacib dəyişən:
+### ✅ Removing Unnecessary Features
 
-Model Year (~47%)
-Digər vacib faktorlar:
+The following columns were removed:
 
-coğrafi məlumatlar
-inzibati bölgələr
-📉 Problemlər və Məhdudiyyətlər
-🔻 Class Imbalance
-PHEV sinfi zəif tanındı
-Recall ≈ 9%
-🔻 Feature çatışmazlığı
-Batareya ölçüsü yoxdur
-Electric Range kifayət qədər informativ deyil
-🔻 SMOTE uğursuz oldu
-siniflər arasında overlap mövcuddur
-oversampling nəticəni yaxşılaşdırmadı
-📈 Əsas Insight-lar
-Yeni model illəri daha çox BEV-dir
-Coğrafi faktorlar təsir göstərir
-Feature keyfiyyəti modeldən daha vacibdir
-⚙️ Model optimizasiyası
-Hyperparameter tuning tətbiq edildi və model performansı optimallaşdırıldı.
+- VIN
+- DOL Vehicle ID
+- State
+- Postal Code
 
-✅ Yekun
-Bu layihə göstərir ki:
+Reason:
 
-Data preprocessing modeldən daha vacib mərhələdir
-Data leakage düzgün idarə olunmalıdır
-Real data ilə işləmək nəzəriyyədən daha çətindir
-🧰 İstifadə olunan texnologiyalar
-Python
-Pandas, NumPy
-Scikit-learn
-XGBoost
-Matplotlib, Seaborn
-💼 Portfolio və iş müraciəti üçün dəyər
-Bu layihə aşağıdakı bacarıqları nümayiş etdirir:
+- Reduce dimensionality
+- Improve computational efficiency
+- Remove non-informative identifiers
 
-Data Cleaning
-Feature Engineering
-Statistical Analysis
-Machine Learning Modeling
-Real-world Problem Solving
+---
+
+### ✅ Electric Range Correction
+
+Some vehicles had an Electric Range equal to **0**, which is not technically realistic.
+
+Solution:
+
+- Replace zero values with the **maximum Electric Range of the same vehicle model**.
+
+---
+
+### ✅ Rare Brand Removal
+
+Vehicle brands with very few observations were excluded to reduce noise and improve model generalization.
+
+---
+
+# 📊 Exploratory Data Analysis (EDA)
+
+The analysis included:
+
+- Distribution of numerical features
+- Outlier detection
+- Category frequency analysis
+- High-cardinality feature inspection
+
+Key numerical variables:
+
+- Model Year
+- Electric Range
+
+---
+
+# 📈 Statistical Analysis
+
+### Chi-Square Tests
+
+Relationships were examined between:
+
+- Vehicle Make ↔ Vehicle Type
+- Vehicle Make ↔ CAFV Eligibility
+- Vehicle Type ↔ CAFV Eligibility
+
+### Findings
+
+All tested relationships were statistically significant, indicating that these variables provide valuable predictive information.
+
+---
+
+# 🌍 Feature Engineering
+
+Vehicle coordinates were extracted from the **Vehicle Location** column.
+
+Generated features:
+
+- Latitude
+- Longitude
+
+These features enabled geographic pattern analysis and improved predictive performance.
+
+---
+
+# 🧠 Feature Selection
+
+Selected model features included:
+
+- Model Year
+- Legislative District
+- 2020 Census Tract
+- Latitude
+- Longitude
+
+---
+
+# ⚙️ Data Preparation
+
+- Categorical encoding
+- Feature scaling
+- Stratified train-test split
+
+Train/Test ratio:
+
+- **80% Training**
+- **20% Testing**
+
+---
+
+# 🤖 Machine Learning Models
+
+The following algorithms were evaluated:
+
+- 🌲 Random Forest
+- ⚡ XGBoost
+
+---
+
+# 📊 Model Performance
+
+| Metric | Result |
+|---------|---------|
+| Best Model | XGBoost |
+| Accuracy | **80.6%** |
+
+---
+
+# 📈 Feature Importance
+
+Most influential feature:
+
+- **Model Year (~47%)**
+
+Other important predictors:
+
+- Geographic coordinates
+- Legislative District
+- Census Tract
+
+---
+
+# ⚠️ Challenges
+
+### Class Imbalance
+
+The PHEV class showed relatively poor recognition.
+
+- Recall ≈ **9%**
+
+---
+
+### Limited Features
+
+The dataset lacked several informative variables, including:
+
+- Battery Capacity
+- Charging Time
+- Battery Health
+
+---
+
+### SMOTE Evaluation
+
+SMOTE was tested but did not improve performance due to significant overlap between the two classes.
+
+---
+
+# 💡 Key Insights
+
+- Newer vehicles are much more likely to be **BEVs**.
+- Geographic location contributes to prediction performance.
+- Feature engineering had a greater impact than model complexity.
+- High-quality preprocessing substantially improved model reliability.
+
+---
+
+# 🔧 Hyperparameter Optimization
+
+Hyperparameter tuning was performed to optimize model performance and improve generalization.
+
+---
+
+# 🛠 Technologies Used
+
+- Python
+- Pandas
+- NumPy
+- Scikit-learn
+- XGBoost
+- Matplotlib
+- Seaborn
+
+---
+
+# 📁 Repository Structure
+
+```
+├── data/
+├── notebooks/
+├── models/
+├── images/
+├── README.md
+└── requirements.txt
+```
+
+---
+
+# 🚀 Skills Demonstrated
+
+- Data Cleaning
+- Exploratory Data Analysis
+- Feature Engineering
+- Statistical Analysis
+- Machine Learning
+- Hyperparameter Tuning
+- Model Evaluation
+- Data Visualization
+- Real-world Problem Solving
+
+---
+
+# 📌 Conclusion
+
+This project demonstrates that successful machine learning depends not only on selecting powerful algorithms but also on careful data preparation, feature engineering, and thoughtful handling of real-world data challenges.
